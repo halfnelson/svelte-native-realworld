@@ -19,3 +19,16 @@ components that have the btn class name.
 .btn {
     font-size: 18;
 }
+
+.icon {
+    font-family: 'Material-Design-Iconic-Font';
+}
+
+actionbar .icon {
+    font-size: 20;
+}
+
+actionbar .title {
+    font-size: 16;
+    margin-left: 20;
+}

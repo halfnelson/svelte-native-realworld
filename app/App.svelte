@@ -1,19 +1,38 @@
-<page class="page">
-    <actionBar title="My App" icon="" class="action-bar">
+<page>
+    <actionBar>
+        <gridLayout columns="auto, *" rows="*" style="width: 100%;" horizontalAlignment="left">
+            <label text="{icons.menu}" row="0" col="0" class="icon" horizontalAlignment="left"
+                verticalAlignment="center"></label>
+            <label text="Home" row="0" col="1" class="title" horizontalAlignment="left"
+                verticalAlignment="center"></label>
+        </gridLayout>
     </actionBar>
-    <stackLayout class="p-20">
-        <label text="Tap the button" class="h1 text-center"/>
-        <button text="TAP" on:tap="{ onTap }" class="btn btn-primary btn-active"/>
-        <label text="{ message }" class="h2 text-center" textWrap="true"/>
-    </stackLayout>
+    <radSideDrawer>
+        <radSideDrawer.drawerContent>
+            <stackLayout class="drawerContent">
+                <label text="Drawer" class="h1 text-center" />
+            </stackLayout>
+        </radSideDrawer.drawerContent>
+        <radSideDrawer.mainContent>
+            <stackLayout class="p-20">
+                <label text="Main" class="h1 text-center" />
+            </stackLayout>
+        </radSideDrawer.mainContent>
+    </radSideDrawer>
 </page>
 
+<style>
+    actionBar {
+        background-color: black;
+        color: white;
+    }
+
+    .drawerContent {
+        background-color: #eeeeee;
+    }
+</style>
+
 <script>
-    let counter = 42;
-    let message;
-    $: message = (counter <= 0) 
-                    ? "Hoorraaay! You unlocked the Svelte-Native clicker achievement!"
-                    : `${counter} taps left`
-    
-    const onTap = () => counter--;
+    import { icons } from './utils/icons'
+
 </script>
