@@ -9,9 +9,7 @@
     </actionBar>
     <radSideDrawer bind:this="{side_drawer}">
         <radSideDrawer.drawerContent>
-            <stackLayout class="drawerContent">
-                <label text="Drawer" class="h1 text-center" />
-            </stackLayout>
+           <SideMenu />
         </radSideDrawer.drawerContent>
         <radSideDrawer.mainContent>
             <ArticleList filtertype="{ $user_token ? 'feed' : 'global' }"  usertoken="{ $user_token }" />
@@ -25,14 +23,12 @@
         color: white;
     }
 
-    .drawerContent {
-        background-color: #eeeeee;
-    }
 </style>
 
 <script>
     import { icons } from './utils/icons'
-    import ArticleList from './components/ArticleList.svelte'
+    import ArticleList from './components/ArticleList'
+    import SideMenu from './components/SideMenu'
     import { user_token } from './stores/user'
 
     let side_drawer;

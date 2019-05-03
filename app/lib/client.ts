@@ -1,3 +1,5 @@
+import { EventEmitter } from "~/utils/eventemitter";
+
 const API_BASE="https://conduit.productionready.io/api"
 
 class ApiError {
@@ -9,27 +11,6 @@ class ApiError {
     message: string = "Api Error"
 }
 
-class EventEmitter<T> {
-    listeners = []
-
-    subscribe(callback) {
-        this.listeners.push(callback);
-        return () => {
-            let idx = this.listeners.indexOf(callback);
-            if (idx >= 0) this.listeners.splice(idx, 1);
-        }
-    }
-
-    fire(event: T) {
-        for(var cb of this.listeners) {
-            try {
-                cb(event);
-            } catch {
-                //ignore
-            }
-        }
-    }
-}
 
 class ApiClient {
     onError: EventEmitter<ApiError>;

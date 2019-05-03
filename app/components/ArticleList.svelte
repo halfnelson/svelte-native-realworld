@@ -8,9 +8,9 @@
 <script>
     import { Template } from 'svelte-native/components'
     import { onMount } from 'svelte'
-    import { ArticleStore } from '../stores/articles'
+    import { ArticleStore, ArticleFilterType } from '../stores/articles'
     
-    export let filtertype = "global"
+    export let filtertype = ArticleFilterType.Global
     export let filterparam = null
     export let usertoken = null
     let items = new ArticleStore();
