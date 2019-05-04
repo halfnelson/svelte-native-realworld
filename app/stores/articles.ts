@@ -48,7 +48,7 @@ export class ArticleStore {
         this.page = page;
         this.user_token = user_token;
 
-        if (this.page = 0) {
+        if (this.page == 0) {
             this.articles.set(response.articles)
         } else {
             this.articles.update(articles => [...articles, ...response.articles])
