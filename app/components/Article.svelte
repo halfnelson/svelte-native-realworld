@@ -25,10 +25,12 @@
             </actionItem>
         {/if}
     </actionBar>
-    <stackLayout class="article-content">
-        <label text="{article.title}" class="article-title" textWrap="true"/>
-        <htmlView html="{article.body}" class="article-body" />
-    </stackLayout>
+    <scrollView>
+        <stackLayout class="article-content">
+            <label text="{article.title}" class="article-title" textWrap="true"/>
+            <htmlView bind:this={html_view} class="article-body" />
+        </stackLayout>
+    </scrollView>
 </page>
 
 <style>
@@ -70,15 +72,18 @@
 
 <script>
     import { goBack } from 'svelte-native'
-
+    import * as marked from 'marked'
     import { icons } from '../utils/icons'
     import { user_token, user_profile } from '../stores/user'
     import { format } from 'timeago.js'
 
+    let html_view;
     export let article
 
-    let avatar_url, avatar_name, article_date;
+    let avatar_url, avatar_name, article_date, article_html
     $: avatar_url = (article.author && article.author.image) ? article.author.image : "https://static.productionready.io/images/smiley-cyrus.jpg";
     $: avatar_name = article.author ? article.author.username : "Anonymous";
     $: article_date = article.createdAt ? format(article.createdAt, 'en_US') : ""
+    $: if (html_view) html_view.setAttribute('html', marked(article.body))
+   
 </script>
