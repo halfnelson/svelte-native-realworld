@@ -1,3 +1,5 @@
+<stackLayout>
+{#if list_items.length}
 <listView items="{list_items}" height="100%" width="100%" on:loadMoreItems={()=> items.loadNextPage()}
 	on:itemTap={openArticle}>
 	<Template let:item>
@@ -21,8 +23,16 @@
 		</stackLayout>
 	</Template>
 </listView>
+{:else}
+  <label horizontalAlignment="center" class="no-articles">No articles are here... yet.</label>
+{/if}
 
+</stackLayout>
 <style>
+  .no-articles {
+    font-size: 15;
+    padding: 20;
+  }
   .article-item {
     padding: 15;
   }
@@ -72,10 +82,19 @@
     export let filtertype = ArticleFilterType.Global;
     export let filterparam = null;
     export let usertoken = null;
+    let loading = false;
+
     let items = new ArticleStore();
-    $: items.loadArticles(filtertype, filterparam, usertoken);
+    $: {
+      items.loadArticles(filtertype, filterparam, usertoken);
+      loading = true;
+    }
+
     let list_items = []
-    $: list_items = $items
+    $: { 
+      list_items = $items;
+      loading = false;
+    }
 
     function openArticle(e) {
         let article = list_items[e.index];

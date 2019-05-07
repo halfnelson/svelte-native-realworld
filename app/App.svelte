@@ -12,7 +12,14 @@
            <SideMenu />
         </radSideDrawer.drawerContent>
         <radSideDrawer.mainContent>
-            <ArticleList filtertype="{ $user_token ? 'feed' : 'global' }"  usertoken="{ $user_token }" />
+            <tabView>
+                <tabViewItem visibility="{$user_token ? 'visible' : 'collapsed'}" title="Your Feed" >
+                    <ArticleList filtertype="feed"  usertoken="{ $user_token }" />
+                </tabViewItem>
+                <tabViewItem title="Global Feed">
+                    <ArticleList filtertype="global"  usertoken="{ $user_token }" />
+                </tabViewItem>
+            </tabView>
         </radSideDrawer.mainContent>
     </radSideDrawer>
 </page>
@@ -29,8 +36,15 @@
     import { icons } from './utils/icons'
     import ArticleList from './components/ArticleList'
     import SideMenu from './components/SideMenu'
-    import { user_token } from './stores/user'
+    import { user_token, user_profile } from './stores/user'
+    import { onMount } from 'svelte'
 
     let side_drawer;
+
+    onMount(()=>{
+        if ($user_token) {
+            user_profile.loadUserFromToken($user_token)
+        }
+    })
     
 </script>
