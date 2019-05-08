@@ -6,8 +6,8 @@
 	</stackLayout>
 	{:else}
 	<stackLayout row="0" horizontalAlignment="left" >
-		<image src="{avatar_url}" class="profile-image" horizontalAlignment="left" />
-		<label text="{avatar_name}" class="profile-name" />
+		<image src="{display_profile.image}" class="profile-image" horizontalAlignment="left" />
+		<label text="{display_profile.username}" class="profile-name" />
 		<stackLayout orientation="horizontal" class="profile-actions">
 			{#if $user_profile}
 			<label text="See profile" class="profile-action" />
@@ -19,6 +19,7 @@
 	</stackLayout>
 	{/if}
 </gridLayout>
+
 <style>
     .user-profile {
         background-color: white;
@@ -38,20 +39,20 @@
     .profile-actions .profile-action {
         margin-right: 20;
     }
-    
 </style>
 
 <script>
     import { showModal } from 'svelte-native';
     import LoginPage from './Login.svelte';
     import { user_token, user_profile } from "../stores/user";
-    let loading, avatar_url, avatar_name;
+    let loading, display_profile
+    let anonymous_profile = {
+        image: "https://static.productionready.io/images/smiley-cyrus.jpg",
+        username: "Anonymous"
+    }
+
     $: loading = $user_token && !$user_profile;
-    $: avatar_url =
-      $user_profile && $user_profile.image
-        ? $user_profile.image
-        : "https://static.productionready.io/images/smiley-cyrus.jpg";
-    $: avatar_name = $user_profile ? $user_profile.username : "Anonymous";
+    $: display_profile = $user_profile || anonymous_profile
 
     function login() {
         showModal({ page: LoginPage, fullscreen: true });

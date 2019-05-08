@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import { client } from '../lib/client'
 import * as appSettings from 'tns-core-modules/application-settings'
 import { User } from '~/models/user';
@@ -23,14 +23,24 @@ export const user_token = buildUserTokenStore();
 
 
 function buildUserProfileStore() {
-    const user_profile = writable(null); 
+    const user_profile = writable(null)
+
+    const user_profile_with_defaults = derived(user_profile, profile => {
+        if (profile && !profile.image) {
+            profile.image = "https://static.productionready.io/images/smiley-cyrus.jpg"
+        }
+        return profile;
+    });
+
     return {
-        subscribe: user_profile.subscribe,
+        subscribe: user_profile_with_defaults.subscribe,
+
         loadUserFromToken(user_token) {
             if (!user_token) return Promise.resolve(null);
             return client.sendRequest<UserResponse>('/user', 'GET', user_token)
                 .then(userResponse => user_profile.set(userResponse.user))
         },
+
         set: user_profile.set
     }
 }
