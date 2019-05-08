@@ -29,7 +29,10 @@
         <stackLayout class="article-content">
             <label text="{article.title}" class="article-title" textWrap="true"/>
             <htmlView bind:this={html_view} class="article-body" />
+            <stackLayout class="hr-light"/>
+            <ArticleComments slug="{article.slug}" />
         </stackLayout>
+        
     </scrollView>
 </page>
 
@@ -67,6 +70,9 @@
         font-weight: bold;
         margin-bottom: 20;
     }
+    .article-body {
+        margin-bottom: 20;
+    }
 
 </style>
 
@@ -76,6 +82,7 @@
     import { icons } from '../utils/icons'
     import { user_token, user_profile } from '../stores/user'
     import { format } from 'timeago.js'
+    import ArticleComments from './ArticleComments'
 
     let html_view;
     export let article
