@@ -23,7 +23,7 @@ export class CommentStore {
         return this.comments.subscribe(action);
     };
     
-    async loadComments(slug, user_token) {
+    async loadComments(slug:string, user_token:string) {
         if (!slug) return;
         try {
             this.comments.update( c => ({ ...c, loading: true }));
@@ -34,13 +34,21 @@ export class CommentStore {
         }
     }
 
-    async addComment(slug, text, user_token) {
+    async addComment(slug:string, text:string, user_token:string) {
         try {
             let res =  await client.sendRequest<CommentResponse>(`/articles/${slug}/comments`, 'POST', user_token, { comment: { body: text }});
             this.loadComments(slug, user_token);    
         } catch (e) {
             alert("Error saving comment: " + e.message)
         }
-        
+    }
+
+    async deleteComment(slug:string, comment_id:number, user_token:string) {
+        try {
+            await client.sendRequest(`/articles/${slug}/comments/${comment_id}`, 'DELETE', user_token);
+            this.comments.update(c => ({ ...c, items: c.items.filter((x:Comment) => x.id != comment_id) })) 
+        } catch (e) {
+            alert("Error deleting comment: " + e.message)
+        }
     }
 }

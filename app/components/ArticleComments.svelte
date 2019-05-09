@@ -10,14 +10,20 @@
             <label row="1" col="1" text="Leave a comment" on:tap="{onWriteComment}" class="font-italic"/>
         </gridLayout>
     {/if}
-    {#each $comments.items as comment}
+    {#each comment_items as comment}
         <stackLayout class="comment">
             <stackLayout class="comment-content">
-                <label text="{comment.body}" />
+                <label text="{comment.body}" textWrap="true" />
             </stackLayout>
-            <stackLayout class="comment-footer">
-                <Author author={comment.author}  date="{comment.createdAt}" height="{28}" />
-            </stackLayout>
+            <gridLayout class="comment-footer" columns="*,auto">
+                <Author author={comment.author}  date="{comment.createdAt}" height="{28}" col="0"/>
+                {#if $user_profile && $user_profile.username == comment.author.username && !comment.deleting }
+                    <label class="delete-button icon" text="{icons.delete}"  col="1" verticalAlignment="center" on:tap={()=>deleteComment(comment)} />
+                {/if}
+                {#if comment.deleting}
+                    <activityIndicator height="28" busy="{true}" col="1"/>
+                {/if}
+            </gridLayout>
         </stackLayout>
     {:else}
          <label text="No comments yet." class="no-comments" horizontalAlignment="center"/>
@@ -28,6 +34,10 @@
 <style> 
 activityIndicator {
     color: black;
+}
+.delete-button {
+    font-size: 20;
+    padding: 2 8;
 }
 .add-comment image {
     border-radius: 50%;
@@ -57,6 +67,7 @@ activityIndicator {
     import { CommentStore } from '../stores/comments'
     import { user_profile } from '../stores/user'
     import { alert } from 'tns-core-modules/ui/dialogs'
+    import { icons } from '../utils/icons'
     import Author from './Author'
     import EditComment from './EditComment'
 
@@ -64,7 +75,11 @@ activityIndicator {
       
     let comments = new CommentStore()
     $: comments.loadComments(article.slug, $user_profile.token).catch(err => alert("Error loading comments"))
- 
+    
+    let comment_items;
+    $: comment_items = $comments.items;
+
+
     function onWriteComment() {
         showModal({
             page: EditComment,
@@ -77,4 +92,9 @@ activityIndicator {
         })
     }
     
+    function deleteComment(comment) {
+        comment.deleting = true;
+        comment_items = comment_items; //refresh the list to show progress
+        comments.deleteComment(article.slug, comment.id , $user_profile.token)
+    }
 </script>

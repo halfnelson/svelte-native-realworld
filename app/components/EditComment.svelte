@@ -49,7 +49,6 @@ image {
     function onPublish() {
         if (new_comment) {
             loading = true;
-            console.log("saving with ",user_profile);
             comments.addComment(article.slug, new_comment, user_profile.token).then(()=>closeModal(true)).catch(()=> loading = false)
         } else {
             alert("Blank comments are boring")
