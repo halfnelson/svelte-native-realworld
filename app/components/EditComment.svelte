@@ -1,7 +1,11 @@
 <stackLayout>
     <gridLayout rows="auto" columns="auto,*,auto" class="action-bar p-10" style="background-color: white; border-bottom-color: lightgray; border-bottom-width: 1;">
-        <button text="{icons.close}" class="icon text-left action-item" row="0" col="0" />
-        <button text="Publish" class="text-right action-item" row="0" col="2" />
+        <button text="{icons.close}" class="icon text-left action-item" row="0" col="0" on:tap={onClose}/>
+        {#if !loading}
+        <button text="Publish" class="text-right action-item" row="0" col="2" on:tap={onPublish} />
+        {:else}
+        <activityIndicator busy={true} width="32" row="0" col="2" />
+        {/if}
     </gridLayout>
 
     <stackLayout>
@@ -16,10 +20,8 @@
             </stackLayout>
         </stackLayout>
 
-        <textView hint="Your Comment" class="m-10 input input-border" editable="{!isLoading}"/>
+        <textView hint="Your Comment" bind:text={new_comment} class="m-10 input input-border" editable={!loading}/>
     </stackLayout>
-
-    <activityIndicator busy="{isLoading}" horizontalAlignment="center" verticalAlignment="center" class="activity-indicator" />
 </stackLayout>
 <style>
 image {
@@ -32,6 +34,27 @@ image {
 
 <script>
     import { icons } from '../utils/icons';
-    let isLoading = false;
+    import { closeModal } from 'svelte-native';
+    
     export let article;
+    export let comments;
+    export let user_profile;
+    let loading = false;
+    let new_comment;
+
+    function onClose() {
+        closeModal(null)
+    }
+
+    function onPublish() {
+        if (new_comment) {
+            loading = true;
+            console.log("saving with ",user_profile);
+            comments.addComment(article.slug, new_comment, user_profile.token).then(()=>closeModal(true)).catch(()=> loading = false)
+        } else {
+            alert("Blank comments are boring")
+        }
+        
+    }
+
 </script>
