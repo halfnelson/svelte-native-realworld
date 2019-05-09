@@ -1,11 +1,9 @@
 <stackLayout padding="10 0" >
  <label text="Comments:" />
-{#if loading}
-    <activityIndicator  busy="{loading}"  color="black"/>
+{#if $comments.loading}
+    <activityIndicator  busy="{true}"  color="black"/>
 {:else}
-    
-   
-    {#each comments as comment}
+    {#each $comments.items as comment}
         <stackLayout class="comment">
             <stackLayout class="comment-content">
                 <label text="{comment.body}" />
@@ -24,7 +22,6 @@
 activityIndicator {
     color: black;
 }
-
 .comment {
     background-color: white;
     border-width: 1;
@@ -46,27 +43,15 @@ activityIndicator {
 </style>
 
 <script>
-    import { onMount } from 'svelte'
-    import { client } from '../lib/client'
+    
+    import { CommentStore } from '../stores/comments'
     import { alert } from 'tns-core-modules/ui/dialogs'
     import Author from './Author'
 
-    let loading = true;
-    let comments = [];
     export let slug;
-    async function loadComments(slug) {
-        if (!slug) return;
-        try {
-            loading = true;
-            let res =  await client.sendRequest(`/articles/${slug}/comments`)
-            comments = res.comments;
-            loading = false;
-        } catch (e) {
-            alert("Error loading comments: " + e.message)
-        }
-    }
 
-    $: loadComments(slug);
+    let comments = new CommentStore()
+    $: comments.loadComments(slug).catch(err => alert("Error loading comments"))
  
     
 </script>
