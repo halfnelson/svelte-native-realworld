@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store'
 import { client } from '../lib/client'
-import { ArticleResponse } from '~/models/article';
+import { Article } from '../models/article'
 
 export enum ArticleFilterType {
     Global = "global",
@@ -8,6 +8,15 @@ export enum ArticleFilterType {
     Tag = "tag",
     Favorited = "favorited",
     Author = "author"
+}
+
+export interface ArticleResponse {
+    articles: Article[],
+    articlesCount: number
+}
+
+export interface SingleArticleResponse {
+    article: Article
 }
 
 const ARTICLES_PER_PAGE = 20;
@@ -61,6 +70,18 @@ export class ArticleStore {
 
     loadNextPage() {
         return this.loadPage(this.page + 1, this.filter_type, this.filter_param, this.user_token)
+    }
+
+    async favoriteArticle(article:Article, user_token: string) {
+        let res = await client.sendRequest<SingleArticleResponse>(`/articles/${article.slug}/favorite`,'POST', user_token);
+        this.articles.update(a => a.map(x => (x.slug == res.article.slug) ? res.article : x))
+        return res.article;
+    }
+
+    async unFavoriteArticle(article:Article, user_token: string) {
+        let res = await client.sendRequest<SingleArticleResponse>(`/articles/${article.slug}/favorite`,'DELETE', user_token);
+        this.articles.update(a => a.map(x => (x.slug == res.article.slug) ? res.article : x))
+        return res.article;
     }
 }
 

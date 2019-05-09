@@ -72,9 +72,12 @@ activityIndicator {
     import EditComment from './EditComment'
 
     export let article;
-      
+    
+    let slug;
+    $: slug = article.slug
+
     let comments = new CommentStore()
-    $: comments.loadComments(article.slug, $user_profile.token).catch(err => alert("Error loading comments"))
+    $: comments.loadComments(slug, $user_profile.token).catch(err => alert("Error loading comments"))
     
     let comment_items;
     $: comment_items = $comments.items;
@@ -95,6 +98,6 @@ activityIndicator {
     function deleteComment(comment) {
         comment.deleting = true;
         comment_items = comment_items; //refresh the list to show progress
-        comments.deleteComment(article.slug, comment.id , $user_profile.token)
+        comments.deleteComment(slug, comment.id , $user_profile.token)
     }
 </script>

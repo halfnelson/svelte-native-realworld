@@ -17,7 +17,7 @@
 				<Author col="0" author="{item.author}" date="{item.createdAt}" />
 				<label col="1" text="{item.favoritesCount}" class="favorites-count" verticalAlignment="center" />
 				<label col="2" text="{item.favorited ? icons['favorite'] : icons['favorite-outline']}" class="icon {item.favorited > 0 ? 'favorited' : ''}"
-				 verticalAlignment="center" />
+				 verticalAlignment="center" on:tap={()=>toggleFavorite(item)} />
 			</gridLayout>
 
 		</stackLayout>
@@ -96,8 +96,17 @@
       loading = false;
     }
 
+    function toggleFavorite(article) {
+        if (!usertoken) return;
+        if (!article.favorited) {
+           items.favoriteArticle(article, usertoken)
+        } else {
+           items.unFavoriteArticle(article, usertoken)
+        }
+    }
+    
     function openArticle(e) {
         let article = list_items[e.index];
-        navigate({ page: Article, props: { article: article }});
+        navigate({ page: Article, props: { article: article, articles: items }});
     }
 </script>

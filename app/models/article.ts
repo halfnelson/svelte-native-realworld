@@ -13,7 +13,3 @@ export interface Article {
     author: Profile
 }
 
-export interface ArticleResponse {
-    articles: Article[],
-    articlesCount: number
-}

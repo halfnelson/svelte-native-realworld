@@ -10,7 +10,7 @@
         </stackLayout>
 
         <actionItem ios.position="right" android.position="actionBar">
-            <stackLayout orientation="horizontal" class="favorited">
+            <stackLayout orientation="horizontal" class="favorited" on:tap={toggleFavorite}>
                 <label text="{article.favoritesCount}" class="favorites-count" verticalAlignment="center"  />
                 <label text="{article.favorited ? icons['favorite'] : icons['favorite-outline']}" class="icon {article.favorited > 0 ? 'favorited' : ''}" verticalAlignment="center" />
             </stackLayout>
@@ -85,10 +85,12 @@
     import { icons } from '../utils/icons'
     import { user_token, user_profile } from '../stores/user'
     import { format } from 'timeago.js'
+    import { alert } from 'tns-core-modules/ui/dialogs'
     import ArticleComments from './ArticleComments'
 
     let html_view;
-    export let article
+    export let article;
+    export let articles;
 
     let avatar_url, avatar_name, article_date, article_html
     $: avatar_url = (article.author && article.author.image) ? article.author.image : "https://static.productionready.io/images/smiley-cyrus.jpg";
@@ -96,5 +98,11 @@
     $: article_date = article.createdAt ? format(article.createdAt, 'en_US') : ""
     $: if (html_view) html_view.setAttribute('html', marked(article.body))
    
-   
+    function toggleFavorite() {
+        (article.favorited 
+            ? articles.favoriteArticle(article, $user_token)
+            : articles.unFavoriteArticle(article, $user_token))
+        .then(art=> article = art )
+        .catch(e => alert("Error favoriting article"))
+    }
 </script>
