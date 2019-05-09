@@ -100,9 +100,9 @@
    
     function toggleFavorite() {
         (article.favorited 
-            ? articles.favoriteArticle(article, $user_token)
-            : articles.unFavoriteArticle(article, $user_token))
-        .then(art=> article = art )
+                ? articles.unFavoriteArticle(article, $user_token)
+                : articles.favoriteArticle(article, $user_token))
+        .then(art => article = art)
         .catch(e => alert("Error favoriting article"))
     }
 </script>

@@ -12,7 +12,7 @@
         <stackLayout class="m-10 p-10 comment-reply-box">
             <label text="Commenting on:" class="font-italic"/>
             <stackLayout orientation="horizontal">
-                <image src="{article.author.image}" stretch="aspectFill" />
+                <image src="{article.author.image || "https://static.productionready.io/images/smiley-cyrus.jpg"}" stretch="aspectFill" />
                 <stackLayout>
                     <label text="{article.title}" class="font-weight-bold" />
                     <label text="by {article.author.username}" class="font-italic" />
