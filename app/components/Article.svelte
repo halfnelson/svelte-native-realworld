@@ -30,6 +30,14 @@
             <label text="{article.title}" class="article-title" textWrap="true"/>
             <htmlView bind:this={html_view} class="article-body" />
             <stackLayout class="hr-light"/>
+            {#if $user_profile}
+                <gridLayout  rows="auto, auto, auto" columns="auto, *" class="m-t-10 add-comment" horizontalAlignment="left"
+                    position="left">
+                    <image row="0" col="0" rowspan="3" src="{$user_profile.image}" class="m-r-10" height="32" stretch="aspectFill"/>
+                    <label row="1" col="1" text="Leave a comment" on:tap="{onWriteComment}" class="font-italic"/>
+                </gridLayout>
+            {/if}
+
             <ArticleComments slug="{article.slug}" />
         </stackLayout>
         
@@ -37,6 +45,9 @@
 </page>
 
 <style>
+    .add-comment image {
+        border-radius: 50%;
+    }
     .author-image {
         width: 32;
         height: 32;
@@ -77,7 +88,8 @@
 </style>
 
 <script>
-    import { goBack } from 'svelte-native'
+    import { goBack, showModal } from 'svelte-native'
+    import EditComment from './EditComment'
     import * as marked from 'marked'
     import { icons } from '../utils/icons'
     import { user_token, user_profile } from '../stores/user'
@@ -93,4 +105,13 @@
     $: article_date = article.createdAt ? format(article.createdAt, 'en_US') : ""
     $: if (html_view) html_view.setAttribute('html', marked(article.body))
    
+    function onWriteComment() {
+        showModal({
+            page: EditComment,
+            fullscreen: true,
+            props: {
+                article: article
+            }
+        })
+    }
 </script>

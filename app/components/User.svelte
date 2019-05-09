@@ -6,7 +6,7 @@
 	</stackLayout>
 	{:else}
 	<stackLayout row="0" horizontalAlignment="left" >
-		<image src="{display_profile.image}" class="profile-image" horizontalAlignment="left" />
+		<image src="{display_profile.image}" class="profile-image" horizontalAlignment="left" stretch="aspectFill" />
 		<label text="{display_profile.username}" class="profile-name" />
 		<stackLayout orientation="horizontal" class="profile-actions">
 			{#if $user_profile}
