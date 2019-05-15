@@ -53,11 +53,13 @@
         font-size: 10;
     }
     .back-button {
-        margin-right: 15;
+        margin-right: 5;
+        padding: 10 10 10 0;
     }
     .action-icon {
         font-size: 20;
         padding: 5 15;
+        height: 100%;
     }
     .favorites-count {
         margin-right: 5;

@@ -3,9 +3,17 @@
         <label row="0" text="{icons.close}" class="icon close-button" horizontalAlignment="right" on:tap={closeModal} />
         <stackLayout row="1" class="form" verticalAlignment="center" >
             <label text="Svelte-Native RealWorld" class="title" horizontalAlignment="center" />
+
+            <stackLayout class="input-field m-t-10">
+                <textField class="input" hint="Username" autocapitalizationType="none"
+                    bind:text="{username}" returnKeyType="next" on:returnPress="{() => email_edit.nativeView.focus()}"
+                    editable="{!isLoading}"/>
+                <stackLayout class="hr-light"/>
+            </stackLayout>
+
             <stackLayout class="input-field m-t-10">
                 <textField class="input" hint="Email" keyboardType="email" autocorrect="false" autocapitalizationType="none"
-                    bind:text="{email}" returnKeyType="next" on:returnPress="{() => password_edit.nativeView.focus()}"
+                    bind:text="{email}" bind:this="{email_edit}" returnKeyType="next" on:returnPress="{() => password_edit.nativeView.focus()}"
                     editable="{!isLoading}"/>
                 <stackLayout class="hr-light"/>
             </stackLayout>
@@ -15,15 +23,15 @@
                 <stackLayout class="hr-light"/>
             </stackLayout>
 
-            <button text="Login" on:tap="{login}" class="btn m-t-20" isEnabled="{!isLoading}"/>
+            <button text="Register" on:tap="{doRegister}" class="btn m-t-20" isEnabled="{!isLoading}"/>
 
             <activityIndicator busy="{isLoading}" horizontalAlignment="center" verticalAlignment="center" class="activity-indicator" />
         </stackLayout>
 
-        <label row="2" class="login-label sign-up-label" on:tap="{register}" horizontalAlignment="center">
+        <label row="2" class="login-label" on:tap="{login}" horizontalAlignment="center">
             <formattedString>
-                <span text="Don't have an account?"/>
-                <span text=" Register" class="bold"/>
+                <span text="Already have an account?"/>
+                <span text=" Login" class="bold"/>
             </formattedString>
         </label>
     </gridLayout>
@@ -51,7 +59,7 @@
         padding: 20;
     }
 
-    .sign-up-label {
+    .login-label {
         font-size: 15;
         padding: 10;
     }
@@ -68,9 +76,9 @@
     import { alert } from 'tns-core-modules/ui/dialogs'
     import { closeModal } from 'svelte-native'
     import { onMount } from 'svelte'
-    import { user_token, user_profile, login } from '../stores/user'
+    import { user_token, user_profile } from '../stores/user'
 
-    let email, password, password_edit;
+    let email, email_edit, password, password_edit, username;
     let isLoading = false;
 
     onMount(()=> {
@@ -79,8 +87,8 @@
         }
     })
 
-    function doLogin() {
-        login(email, password).then(
+    function login() {
+        /* login(email, password).then(
             user => closeModal(user),
             err => {
                 if (err.errorCode == 422) {
@@ -90,9 +98,10 @@
                 }
             }
         )
+        */
     }
 
-    function register() {
-        alert(`register`)
+    function doRegister() {
+        
     }
 </script>

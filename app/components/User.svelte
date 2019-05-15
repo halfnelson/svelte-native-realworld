@@ -10,7 +10,7 @@
 		<label text="{display_profile.username}" class="profile-name" />
 		<stackLayout orientation="horizontal" class="profile-actions">
 			{#if $user_profile}
-			<label text="See profile" class="profile-action" />
+			<label text="See profile" class="profile-action" on:tap={showProfile}/>
 			{:else}
 			<label text="Login" class="profile-action" on:tap={login} />
 			<label text="Sign Up" class="profile-action" />
@@ -42,9 +42,10 @@
 </style>
 
 <script>
-    import { showModal } from 'svelte-native';
+    import { showModal, navigate } from 'svelte-native';
     import LoginPage from './Login.svelte';
     import { user_token, user_profile } from "../stores/user";
+    import ProfilePage from './ProfilePage'
     let loading, display_profile
     let anonymous_profile = {
         image: "https://static.productionready.io/images/smiley-cyrus.jpg",
@@ -56,5 +57,9 @@
 
     function login() {
         showModal({ page: LoginPage, fullscreen: true });
+    }
+
+    function showProfile() {
+        navigate({ page: ProfilePage, props: { profile: $user_profile }})
     }
 </script>
