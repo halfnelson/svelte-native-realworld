@@ -6,17 +6,17 @@ Todo:
 
  - [x] Article List  
  - [x] Article Content
- - [ ] Article Comments
+ - [x] Article Comments
  - [x] Login
  - [ ] Register
  - [ ] Profile View
  - [ ] Profile Edit
  - [x] Tag Cloud
  - [ ] Articles for Tag
- - [ ] Favourite Article
+ - [x] Favourite Article
  - [ ] Follow Author
  - [ ] Create Article
  - [ ] Update Article
  - [ ] Delete Article
- - [ ] Comment on Article
- - [ ] Delete Comment
+ - [x] Comment on Article
+ - [x] Delete Comment
