@@ -12,14 +12,20 @@
            <SideMenu />
         </radSideDrawer.drawerContent>
         <radSideDrawer.mainContent>
-            <tabView>
-                <tabViewItem visibility="{$user_token ? 'visible' : 'collapsed'}" title="Your Feed" >
-                    <ArticleList filtertype="feed"  usertoken="{ $user_token }" />
-                </tabViewItem>
-                <tabViewItem title="Global Feed">
-                    <ArticleList filtertype="global"  usertoken="{ $user_token }" />
-                </tabViewItem>
-            </tabView>
+            <stackLayout>    
+                {#if $user_token}                
+                    <tabView>
+                        <tabViewItem title="Your Feed" >
+                            <ArticleList filtertype="feed"  usertoken="{ $user_token }" />
+                        </tabViewItem>
+                        <tabViewItem title="Global Feed">
+                            <ArticleList filtertype="global"  usertoken="{ $user_token }" />
+                        </tabViewItem>
+                    </tabView>
+                {:else}
+                    <ArticleList filtertype="global" />
+                {/if}
+            </stackLayout>
         </radSideDrawer.mainContent>
     </radSideDrawer>
 </page>
@@ -42,8 +48,9 @@
     let side_drawer;
 
     onMount(()=>{
+        console.log("starting with ", $user_token)
         if ($user_token) {
-            user_profile.loadUserFromToken($user_token)
+            user_profile.loadUserFromToken($user_token).catch(e=>console.log("error loading profile", e))
         }
     })
     

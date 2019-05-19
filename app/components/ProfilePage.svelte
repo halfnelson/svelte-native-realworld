@@ -4,15 +4,15 @@
             <Profile profile={profile} biolimit={80} />
         </stackLayout>
         <label row="0" text="{icons['arrow-left']}" class="icon action-icon back-button" horizontalAlignment="left" on:tap={goBack} />
-        {#if profile.username == $user_profile.username}
+        {#if $user_profile && profile.username == $user_profile.username}
         <label row="0" text="{icons.edit}" class="icon action-icon" horizontalAlignment="right" />
         {/if}
         <tabView row="1"> 
             <tabViewItem title="Posts" >
-                <ArticleList filtertype="author" filterparam="{profile.username}"  usertoken="{ $user_profile.token }" />
+                <ArticleList filtertype="author" filterparam="{profile.username}"  usertoken="{ $user_profile ? $user_profile.token : null }" />
             </tabViewItem>
             <tabViewItem title="Favorites">
-                <ArticleList filtertype="favorited" filterparam="{profile.username}" usertoken="{ $user_profile.token }" />
+                <ArticleList filtertype="favorited" filterparam="{profile.username}" usertoken="{ $user_profile ? $user_profile.token : null }" />
             </tabViewItem>
         </tabView>
 	</gridLayout>

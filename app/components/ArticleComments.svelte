@@ -77,7 +77,7 @@ activityIndicator {
     $: slug = article.slug
 
     let comments = new CommentStore()
-    $: comments.loadComments(slug, $user_profile.token).catch(err => alert("Error loading comments"))
+    $: comments.loadComments(slug, $user_profile ? $user_profile.token: null).catch(err => alert("Error loading comments"))
     
     let comment_items;
     $: comment_items = $comments.items;

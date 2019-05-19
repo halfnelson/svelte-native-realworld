@@ -29,6 +29,7 @@ export class ArticleStore {
     filter_type:ArticleFilterType = null;
     filter_param:string = null;
     user_token: string = null;
+    no_more_results: boolean = false;
 
     constructor() {
         this.articles = writable([]);
@@ -51,11 +52,13 @@ export class ArticleStore {
         }
         url += `offset=${page * ARTICLES_PER_PAGE}&limit=${ARTICLES_PER_PAGE}`
         let response = await client.sendRequest<ArticleResponse>(url,'get', user_token)
-        
+      
         this.filter_type = filter_type;
         this.filter_param = filter_param;
         this.page = page;
         this.user_token = user_token;
+
+        this.no_more_results = response.articles.length == 0;
 
         if (this.page == 0) {
             this.articles.set(response.articles)
@@ -69,6 +72,7 @@ export class ArticleStore {
     }
 
     loadNextPage() {
+        if (this.no_more_results) return;
         return this.loadPage(this.page + 1, this.filter_type, this.filter_param, this.user_token)
     }
 
