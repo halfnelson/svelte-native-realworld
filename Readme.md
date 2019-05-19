@@ -9,7 +9,7 @@ Todo:
  - [x] Article Comments
  - [x] Login
  - [ ] Register
- - [ ] Profile View
+ - [x] Profile View
  - [ ] Profile Edit
  - [x] Tag Cloud
  - [ ] Articles for Tag
