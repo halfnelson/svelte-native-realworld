@@ -61,3 +61,18 @@ export function login(email: string, password: string):Promise<User> {
     })
 }
 
+export function register(username: string, email: string, password: string):Promise<User> {
+    return client.sendRequest<UserResponse>('/users', 'POST', null, {
+        user: {
+            username: username,
+            email: email,
+            password: password
+        }
+    }).then(userResponse => {
+        let user = userResponse.user;
+        user_token.set(user.token);
+        user_profile.set(user);
+        return user;
+    })
+}
+

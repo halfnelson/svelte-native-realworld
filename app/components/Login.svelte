@@ -1,4 +1,4 @@
-<page>
+<page  actionBarHidden="true">
     <gridLayout class="layout page"  rows="auto, *, auto" >
         <label row="0" text="{icons.close}" class="icon close-button" horizontalAlignment="right" on:tap={closeModal} />
         <stackLayout row="1" class="form" verticalAlignment="center" >
@@ -66,9 +66,10 @@
 <script>
     import { icons } from '../utils/icons'
     import { alert } from 'tns-core-modules/ui/dialogs'
-    import { closeModal } from 'svelte-native'
+    import { closeModal, navigate } from 'svelte-native'
     import { onMount } from 'svelte'
     import { user_token, user_profile, login } from '../stores/user'
+    import Register from './Register'
 
     let email, password, password_edit;
     let isLoading = false;
@@ -93,6 +94,8 @@
     }
 
     function register() {
-        alert(`register`)
+        navigate(
+            { page: Register, clearHistory: true }
+        );
     }
 </script>

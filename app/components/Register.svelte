@@ -1,4 +1,4 @@
-<page>
+<page actionBarHidden="true">
     <gridLayout class="layout page"  rows="auto, *, auto" >
         <label row="0" text="{icons.close}" class="icon close-button" horizontalAlignment="right" on:tap={closeModal} />
         <stackLayout row="1" class="form" verticalAlignment="center" >
@@ -19,7 +19,7 @@
             </stackLayout>
 
             <stackLayout class="input-field">
-                <textField bind:text="{password}" bind:this={password_edit} class="input" hint="Password" secure="true" returnKeyType="done" on:returnPress="{doLogin}" editable="{!isLoading}" />
+                <textField bind:text="{password}" bind:this={password_edit} class="input" hint="Password" secure="true" returnKeyType="done" on:returnPress="{doRegister}" editable="{!isLoading}" />
                 <stackLayout class="hr-light"/>
             </stackLayout>
 
@@ -74,9 +74,10 @@
 <script>
     import { icons } from '../utils/icons'
     import { alert } from 'tns-core-modules/ui/dialogs'
-    import { closeModal } from 'svelte-native'
+    import { closeModal, navigate } from 'svelte-native'
     import { onMount } from 'svelte'
-    import { user_token, user_profile } from '../stores/user'
+    import { user_token, user_profile, register } from '../stores/user'
+    import Login from './Login'
 
     let email, email_edit, password, password_edit, username;
     let isLoading = false;
@@ -88,20 +89,31 @@
     })
 
     function login() {
-        /* login(email, password).then(
+       navigate({ page: Login, clearHistory: true });
+    }
+
+    function doRegister() {
+        register(username, email, password).then(
             user => closeModal(user),
             err => {
                 if (err.errorCode == 422) {
-                    alert("Invalid username/password")
+                    if (!err.errors || !err.errors.errors) {
+                        alert("Invalid username/email/password")
+                    } else {
+                        let msg =""
+                        let errs = err.errors.errors;
+                        for (let field of Object.keys(errs)) {
+                            msg += `${field}:\n  ${errs[field][0]}\n\n`
+                        }
+                        alert({
+                            title: "Validation Problem",
+                            message: msg
+                        })
+                    }
                 } else {
                     alert(err.message);
                 }
             }
         )
-        */
-    }
-
-    function doRegister() {
-        
     }
 </script>
