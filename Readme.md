@@ -8,9 +8,9 @@ Todo:
  - [x] Article Content
  - [x] Article Comments
  - [x] Login
- - [ ] Register
+ - [x] Register
  - [x] Profile View
- - [ ] Profile Edit
+ - [x] Profile Edit
  - [x] Tag Cloud
  - [ ] Articles for Tag
  - [x] Favourite Article
