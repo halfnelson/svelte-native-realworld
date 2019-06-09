@@ -1,7 +1,7 @@
 <page>
     <actionBar title="">
         <stackLayout orientation="horizontal" horizontalAlignment="left" position="left">
-            <label text="{icons['arrow-left']}" class="icon back-button" verticalAlignment="center" on:tap={goBack}/>
+            <BackButton />
             <image class="author-image" src="{avatar_url}" stretch="aspectFill" />
             <stackLayout orientation="vertical">
                 <label text="{avatar_name}" class="author-name"/>
@@ -52,10 +52,6 @@
     .date {
         font-size: 10;
     }
-    .back-button {
-        margin-right: 5;
-        padding: 10 10 10 0;
-    }
     .action-icon {
         font-size: 20;
         padding: 5 15;
@@ -88,6 +84,7 @@
     import { user_token, user_profile } from '../stores/user'
     import { format } from 'timeago.js'
     import { alert } from 'tns-core-modules/ui/dialogs'
+    import BackButton from './BackButton'
     import ArticleComments from './ArticleComments'
 
     let html_view;

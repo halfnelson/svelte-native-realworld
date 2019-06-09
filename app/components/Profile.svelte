@@ -1,7 +1,8 @@
 <script>
     import { user_profile } from "../stores/user";
-    import { navigate } from 'svelte-native';
+    import { navigate, showModal } from 'svelte-native';
     import ProfileBio from './ProfileBio';
+    import ProfileSettings from './ProfileSettings'
     export let profile;
     export let biolimit = 80
     const preview_length = 80;
@@ -14,8 +15,11 @@
         console.log("show bio");
     }
 
-    function show_settings() {
-       // navigate({page: ProfileSettings})
+    async function show_settings() {
+      let updated_user =  await showModal({page: ProfileSettings, fullscreen: true})
+      if (updated_user) {
+        profile = $user_profile
+      }
     }
 </script>
 

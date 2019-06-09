@@ -3,7 +3,7 @@
         <stackLayout row="0">
             <Profile profile={profile} biolimit={80} />
         </stackLayout>
-        <label row="0" text="{icons['arrow-left']}" class="icon action-icon back-button" horizontalAlignment="left" on:tap={goBack} />
+        <label row="0" text="{icons['arrow-left']}" class="icon action-icon" horizontalAlignment="left" on:tap={goBack} />
         <tabView row="1"> 
             <tabViewItem title="Posts" >
                 <ArticleList filtertype="author" filterparam="{profile.username}"  usertoken="{ $user_profile ? $user_profile.token : null }" />
