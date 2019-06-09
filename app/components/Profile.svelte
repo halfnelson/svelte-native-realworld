@@ -13,6 +13,10 @@
         navigate({page: ProfileBio, props: { profile: profile }})
         console.log("show bio");
     }
+
+    function show_settings() {
+       // navigate({page: ProfileSettings})
+    }
 </script>
 
 <style>
@@ -76,17 +80,25 @@
         text={profile.username}
         class="profile-name"
         horizontalAlignment="left" />
-      {#if profile.following}
-        <button
-          text="Following"
-          class="following-button"
-          horizontalAlignment="center" />
-      {:else}
-        <button
-          text="Follow"
-          class="follow-button"
-          horizontalAlignment="center" />
-      {/if}
+        {#if $user_profile && profile.username == $user_profile.username}
+          <button
+              text="Settings"
+              class="follow-button"
+              horizontalAlignment="center"
+              on:tap={show_settings} />
+        {:else}
+          {#if profile.following}
+            <button
+              text="Following"
+              class="following-button"
+              horizontalAlignment="center" />
+          {:else}
+            <button
+              text="Follow"
+              class="follow-button"
+              horizontalAlignment="center" />
+          {/if}
+        {/if}
     </stackLayout>
   </stackLayout>
   {#if profile.bio}

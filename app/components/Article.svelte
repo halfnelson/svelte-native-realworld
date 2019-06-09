@@ -47,7 +47,7 @@
         border-radius: 50%;
     }
     .author-name {
-        font-size: 12;
+        font-size: 14;
     }
     .date {
         font-size: 10;
