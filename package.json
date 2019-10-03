@@ -29,6 +29,7 @@
         "eslint-plugin-svelte3": "^1.2.0",
         "nativescript": "^6.1.2",
         "nativescript-dev-webpack": "~1.2.0",
+        "nativescript-worker-loader": "^0.9.6-next-2019-07-25-105954-01",
         "svelte": "^3.12.1",
         "svelte-loader": "github:rixo/svelte-loader#hmr-native",
         "svelte-native-preprocessor": "^0.1.4",
