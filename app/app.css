@@ -26,6 +26,7 @@ components that have the btn class name.
 
 actionbar .icon {
     font-size: 20;
+    color: #fff06b;
 }
 
 actionbar .title {
