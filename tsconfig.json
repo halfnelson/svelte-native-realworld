@@ -1,24 +1,31 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "noEmitHelpers": true,
-        "noEmitOnError": true,
-        "lib": [
-            "es6",
-            "dom"
-        ],
-        "baseUrl": ".",
-        "paths": {
-            "~/*": [
-                "app/*"
-            ]
-        }
-    },
-    "exclude": [
-        "node_modules",
-        "platforms"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noEmitHelpers": true,
+    "noEmitOnError": true,
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "app/*"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "platforms"
+  ],
+  "include": [
+    "./app/*.ts",
+    "./app/**/*.ts"
+  ],
+  "files": [
+    "./app/app.ts"
+  ]
 }

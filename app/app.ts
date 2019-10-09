@@ -10,6 +10,9 @@ import { RadSideDrawer } from 'nativescript-ui-sidedrawer'
 
 import * as trace from "tns-core-modules/trace"
 
+import "nativescript-theme-core";
+import './app.css';
+
 // register plugins
 registerElement('radSideDrawer', () => new NativeElementNode('radSideDrawer', RadSideDrawer))
 

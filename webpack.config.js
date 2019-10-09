@@ -1,4 +1,4 @@
-const { join, relative, resolve, sep } = require("path");
+const {join, relative, resolve, sep} = require("path");
 
 const webpack = require("webpack");
 const nsWebpack = require("nativescript-dev-webpack");
@@ -6,10 +6,11 @@ const nativescriptTarget = require("nativescript-dev-webpack/nativescript-target
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const { NativeScriptWorkerPlugin } = require("nativescript-worker-loader/NativeScriptWorkerPlugin");
+const {BundleAnalyzerPlugin} = require("webpack-bundle-analyzer");
+const {NativeScriptWorkerPlugin} = require("nativescript-worker-loader/NativeScriptWorkerPlugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const hashSalt = Date.now().toString();
+const svelteNativePreprocessor = require("svelte-native-preprocessor");
 
 module.exports = env => {
     // Add your custom Activities, Services and other Android app components here.
@@ -31,8 +32,7 @@ module.exports = env => {
 
     const {
         // The 'appPath' and 'appResourcesPath' values are fetched from
-        // the nsconfig.json configuration file
-        // when bundling with `tns run android|ios --bundle`.
+        // the nsconfig.json configuration file.
         appPath = "app",
         appResourcesPath = "app/App_Resources",
 
@@ -55,7 +55,7 @@ module.exports = env => {
 
     const entryModule = nsWebpack.getEntryModule(appFullPath, platform);
     const entryPath = `.${sep}${entryModule}.ts`;
-    const entries = { bundle: entryPath };
+    const entries = {bundle: entryPath};
 
     const tsConfigPath = resolve(projectRoot, "tsconfig.tns.json");
 
@@ -63,6 +63,7 @@ module.exports = env => {
     if (platform === "ios" && !areCoreModulesExternal) {
         entries["tns_modules/tns-core-modules/inspector_modules"] = "inspector_modules";
     }
+    ;
 
     let sourceMapFilename = nsWebpack.getSourceMapFilename(hiddenSourceMap, __dirname, dist);
 
@@ -92,11 +93,11 @@ module.exports = env => {
             sourceMapFilename,
             libraryTarget: "commonjs2",
             filename: "[name].js",
-            globalObject: "global",
-            hashSalt
+            globalObject: "this",
+            hashSalt,
         },
         resolve: {
-            extensions: [".ts", ".js", ".scss", ".css"],
+            extensions: [".ts", ".js", ".svelte", ".mjs", ".scss", ".css"],
             // Resolve {N} system modules from tns-core-modules
             modules: [
                 resolve(__dirname, "node_modules/tns-core-modules"),
@@ -164,12 +165,12 @@ module.exports = env => {
         module: {
             rules: [
                 {
-                    test: nsWebpack.getEntryPathRegExp(appFullPath, entryPath),
+                    include: join(appFullPath, entryPath),
                     use: [
                         // Require all Android app components
                         platform === "android" && {
                             loader: "nativescript-dev-webpack/android-app-components-loader",
-                            options: { modules: appComponents }
+                            options: {modules: appComponents}
                         },
 
                         {
@@ -184,27 +185,31 @@ module.exports = env => {
                         },
                     ].filter(loader => !!loader)
                 },
-                
+
                 {
                     test: /\.(ts|css|scss|html|xml)$/,
                     use: "nativescript-dev-webpack/hmr/hot-loader"
                 },
 
-                { test: /\.(html|xml)$/, use: "nativescript-dev-webpack/xml-namespace-loader" },
+                {test: /\.(html|xml)$/, use: "nativescript-dev-webpack/xml-namespace-loader"},
 
                 {
                     test: /\.css$/,
-                    use: { loader: "css-loader", options: { url: false } }
+                    use: {loader: "css-loader", options: {url: false}}
                 },
 
                 {
                     test: /\.scss$/,
                     use: [
-                        { loader: "css-loader", options: { url: false } },
+                        {loader: "css-loader", options: {url: false}},
                         "sass-loader"
                     ]
                 },
 
+                {
+                    test: /\.mjs$/,
+                    type: 'javascript/auto',
+                },
                 {
                     test: /\.ts$/,
                     use: {
@@ -222,6 +227,22 @@ module.exports = env => {
                         },
                     }
                 },
+                {
+                    test: /\.svelte$/,
+                    exclude: /node_modules/,
+                    use: [
+                        {
+                            loader: 'svelte-loader',
+                            options: {
+                                preprocess: svelteNativePreprocessor(),
+                                hotReload: true,
+                                hotOptions: {
+                                    native: true
+                                }
+                            }
+                        }
+                    ]
+                }
             ]
         },
         plugins: [
@@ -231,13 +252,14 @@ module.exports = env => {
                 "process": "global.process",
             }),
             // Remove all files from the out dir.
-            new CleanWebpackPlugin(itemsToClean, { verbose: !!verbose }),
+            new CleanWebpackPlugin(itemsToClean, {verbose: !!verbose}),
             // Copy assets to out dir. Add your own globs as needed.
             new CopyWebpackPlugin([
-                { from: { glob: "fonts/**" } },
-                { from: { glob: "**/*.jpg" } },
-                { from: { glob: "**/*.png" } },
-            ], { ignore: [`${relative(appPath, appResourcesFullPath)}/**`] }),
+                {from: {glob: "fonts/**"}},
+                {from: {glob: "**/*.jpg"}},
+                {from: {glob: "**/*.png"}},
+                {from: {glob: "**/*.css"}}
+            ], {ignore: [`${relative(appPath, appResourcesFullPath)}/**`]}),
             new nsWebpack.GenerateNativeScriptEntryPointsPlugin("bundle"),
             // For instructions on how to set up workers with webpack
             // check out https://github.com/nativescript/worker-loader
