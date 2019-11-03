@@ -5,23 +5,20 @@ purpose of the file is to pass control to the app’s first module.
 */
 
 import { svelteNative, DomTraceCategory } from "svelte-native";
-import { registerElement, NativeElementNode } from 'svelte-native/dom'
+import { registerNativeViewElement} from 'svelte-native/dom'
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer'
-
+import App from "./App.svelte";
 import * as trace from "tns-core-modules/trace"
 
-import "nativescript-theme-core";
-import './app.css';
-
 // register plugins
-registerElement('radSideDrawer', () => new NativeElementNode('radSideDrawer', RadSideDrawer))
+registerNativeViewElement('radSideDrawer', () => RadSideDrawer)
 
 
 //enable trace
 //trace.enable();
-trace.addCategories(DomTraceCategory)
+//trace.addCategories(DomTraceCategory)
 
 
-import App from  "./App.svelte";
+
 svelteNative(App, {});
 
